@@ -1,4 +1,4 @@
-#20M19118_CHENYING_CUDA
+//20M19118_CHENYING_CUDA
 #include <cstdio>
 #include <cmath>
 #include <vector>
