@@ -1,4 +1,4 @@
-#20M19118 CHENYING_01_OPENMP
+//20M19118 CHENYING_01_OPENMP
 #include <cstdio>
 #include <cmath>
 #include <vector>
