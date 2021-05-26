@@ -1,4 +1,4 @@
-#20M19118_CHENYING_SIMD
+//20M19118_CHENYING_SIMD
 #include <cstdio>
 #include <cmath>
 #include <vector>
