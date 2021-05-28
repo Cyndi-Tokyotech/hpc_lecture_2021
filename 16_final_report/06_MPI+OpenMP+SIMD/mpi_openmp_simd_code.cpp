@@ -1,6 +1,8 @@
 //20M19118
 
-//compile with mpi_openmp_simd_code.cpp -fopenmp -march=native -O3 -std=c++11
+//compile with mpicxx mpi_openmp_simd_code.cpp -fopenmp -march=native -O3 -std=c++11
+
+//mpirun -np 4 ./a.out
 
 #include <immintrin.h>
 #include <bits/stdc++.h>
