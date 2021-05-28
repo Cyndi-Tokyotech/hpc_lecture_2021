@@ -1,6 +1,6 @@
 //20M19118
 
-//Compile with mpi_openmp_code.cpp -fopenmp -std=c++11
+//Compile with gcc mpi_openmp_code.cpp -fopenmp -std=c++11
 
 #include <mpi.h>
 #include <bits/stdc++.h>
@@ -14,7 +14,7 @@ int main(int argc, char** argv)
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-// Generate Matrix
+    // Generate Matrix
     const int N = 256;
     vector<double> A(N * N);
     vector<double> B(N * N);
@@ -30,7 +30,7 @@ int main(int argc, char** argv)
             B[N * i + j] = drand48();
         }
     }
-    
+
     int offset = N / size * rank;
     for (int i = 0; i < N / size; i++)
         for (int j = 0; j < N; j++)
@@ -41,11 +41,11 @@ int main(int argc, char** argv)
     int recv_from = (rank + 1) % size;
     int send_to = (rank - 1 + size) % size;
 
-
+    
     double comp_time = 0, comm_time = 0;
     for (int irank = 0; irank < size; irank++)
     {
-// Record starttime
+
         auto tic = chrono::steady_clock::now();
         
         offset = N / size * ((rank + irank) % size);
@@ -59,29 +59,25 @@ int main(int argc, char** argv)
                     subC[N * i + j + offset] += subA[N * i + k] * subB[N / size * k + j];
 }
         
-// Record endtime
         auto toc = chrono::steady_clock::now();
-// Record the time use
         comp_time += chrono::duration<double>(toc - tic).count();
         
-
         MPI_Send(&subB[0], N * N / size, MPI_DOUBLE, send_to, 0, MPI_COMM_WORLD);
         MPI_Recv(&subB[0], N * N / size, MPI_DOUBLE, recv_from, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         
-
-        toc = chrono::steady_clock::now();
-        comm_time += chrono::duration<double>(toc-tic).count();
+        
+        tic = chrono::steady_clock::now();
+        comm_time += chrono::duration<double>(tic - toc).count();
     }
 
     MPI_Allgather(&subC[0], N * N / size, MPI_DOUBLE, &C[0], N * N / size, MPI_DOUBLE, MPI_COMM_WORLD);
   
-
+// Record the Error
     for (int i = 0; i < N; i++)
         for (int j = 0; j < N; j++)
             for (int k = 0; k < N; k++)
                 C[N * i + j] -= A[N * i + k] * B[N * k + j];
     
- //Record the Error
     double err = 0;
     for (int i = 0; i < N; i++)
         for (int j = 0; j < N; j++)
