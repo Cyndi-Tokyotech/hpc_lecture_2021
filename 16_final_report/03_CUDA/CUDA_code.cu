@@ -1,4 +1,7 @@
 //20M19118_CHENYING_CUDA
+//module load cuda
+//nvcc CUDA_code.cu -std=c++11
+
 #include <cstdio>
 #include <cmath>
 #include <vector>
